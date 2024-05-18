@@ -197,6 +197,7 @@ mod loops;
 mod macro_metavars_in_unsafe;
 mod macro_use;
 mod main_recursion;
+mod manual_and;
 mod manual_assert;
 mod manual_async_fn;
 mod manual_bits;
@@ -1167,6 +1168,7 @@ pub fn register_lints(store: &mut rustc_lint::LintStore, conf: &'static Conf) {
         })
     });
     store.register_late_pass(|_| Box::new(manual_or::ManualOr));
+    store.register_late_pass(|_| Box::new(manual_and::ManualAnd));
     // add lints here, do not remove this comment, it's used in `new_lint`
 }
 
