@@ -159,7 +159,7 @@ LL |     if x == false {};
    |        ^^^^^^^^^^ help: try simplifying it as shown: `!x`
 
 error: this if-then-else expression returns a bool literal
-  --> tests/ui/needless_bool/fixable.rs:168:12
+  --> tests/ui/needless_bool/fixable.rs:169:12
    |
 LL |       } else if returns_bool() {
    |  ____________^
@@ -170,7 +170,7 @@ LL | |     };
    | |_____^ help: you can reduce it to: `{ !returns_bool() }`
 
 error: this if-then-else expression returns a bool literal
-  --> tests/ui/needless_bool/fixable.rs:181:5
+  --> tests/ui/needless_bool/fixable.rs:182:5
    |
 LL | /     if unsafe { no(4) } & 1 != 0 {
 LL | |         true
@@ -180,13 +180,13 @@ LL | |     };
    | |_____^ help: you can reduce it to: `(unsafe { no(4) } & 1 != 0)`
 
 error: this if-then-else expression returns a bool literal
-  --> tests/ui/needless_bool/fixable.rs:186:30
+  --> tests/ui/needless_bool/fixable.rs:187:30
    |
 LL |     let _brackets_unneeded = if unsafe { no(4) } & 1 != 0 { true } else { false };
    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: you can reduce it to: `unsafe { no(4) } & 1 != 0`
 
 error: this if-then-else expression returns a bool literal
-  --> tests/ui/needless_bool/fixable.rs:189:9
+  --> tests/ui/needless_bool/fixable.rs:190:9
    |
 LL |         if unsafe { no(4) } & 1 != 0 { true } else { false }
    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: you can reduce it to: `(unsafe { no(4) } & 1 != 0)`

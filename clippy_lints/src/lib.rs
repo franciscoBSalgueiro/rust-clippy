@@ -207,6 +207,7 @@ mod manual_is_ascii_check;
 mod manual_let_else;
 mod manual_main_separator_str;
 mod manual_non_exhaustive;
+mod manual_or;
 mod manual_range_patterns;
 mod manual_rem_euclid;
 mod manual_retain;
@@ -1165,6 +1166,7 @@ pub fn register_lints(store: &mut rustc_lint::LintStore, conf: &'static Conf) {
             ..Default::default()
         })
     });
+    store.register_late_pass(|_| Box::new(manual_or::ManualOr));
     // add lints here, do not remove this comment, it's used in `new_lint`
 }
 

@@ -108,6 +108,7 @@ fn needless_bool3(x: bool) {
 }
 
 fn needless_bool_in_the_suggestion_wraps_the_predicate_of_if_else_statement_in_brackets() {
+    #![allow(clippy::manual_or)]
     let b = false;
     let returns_bool = || false;
 
