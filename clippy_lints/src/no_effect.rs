@@ -243,10 +243,11 @@ fn has_no_effect(cx: &LateContext<'_>, expr: &Expr<'_>) -> bool {
                     cx.qpath_res(qpath, callee.hir_id),
                     Res::Def(DefKind::Struct | DefKind::Variant | DefKind::Ctor(..), ..)
                 );
-                def_matched
-                    || is_range_literal(expr)
-                        && !has_drop(cx, cx.typeck_results().expr_ty(expr))
-                        && args.iter().all(|arg| has_no_effect(cx, arg))
+                if def_matched || is_range_literal(expr) {
+                    !has_drop(cx, cx.typeck_results().expr_ty(expr)) && args.iter().all(|arg| has_no_effect(cx, arg))
+                } else {
+                    false
+                }
             } else {
                 false
             }

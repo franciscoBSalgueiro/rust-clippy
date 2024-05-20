@@ -1,8 +1,9 @@
 use clippy_utils::diagnostics::span_lint_and_then;
-use clippy_utils::{peel_blocks, get_parent_expr};
 use clippy_utils::visitors::for_each_expr;
+use clippy_utils::{get_parent_expr, peel_blocks};
 use core::ops::ControlFlow;
 use rustc_ast::ast::LitKind;
+use rustc_ast::BinOpKind;
 use rustc_errors::Applicability;
 use rustc_hir::{Expr, ExprKind};
 use rustc_lint::{LateContext, LateLintPass, LintContext};
@@ -64,15 +65,30 @@ fn contains_let(cond: &Expr<'_>) -> bool {
     .is_some()
 }
 
+fn contains_or(cond: &Expr<'_>) -> bool {
+    for_each_expr(cond, |e| {
+        if let ExprKind::Binary(ref n, _, _) = e.kind {
+            if n.node == BinOpKind::Or {
+                ControlFlow::Break(())
+            } else {
+                ControlFlow::Continue(())
+            }
+        } else {
+            ControlFlow::Continue(())
+        }
+    })
+    .is_some()
+}
+
 impl<'tcx> LateLintPass<'tcx> for ManualAnd {
     fn check_expr(&mut self, cx: &LateContext<'tcx>, expr: &Expr<'tcx>) {
         if let Some(parent) = get_parent_expr(cx, expr) {
-            if let ExprKind::If(_, _ ,_) = parent.kind {
+            if let ExprKind::If(_, _, _) = parent.kind {
                 return;
             }
         }
         if let ExprKind::If(cond, then, Some(else_expr)) = expr.kind {
-            if contains_let(cond) {
+            if contains_let(cond) || contains_or(cond) || contains_or(then) {
                 return;
             }
             if fetch_bool_expr(then).is_some()
